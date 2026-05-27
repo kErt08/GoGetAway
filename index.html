@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#00b4a6">
+<title>GoGetAway — Just Go.</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Nunito:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="loader">
+  <div class="loader-brand"><span class="go">Go</span><span class="get">Get</span><span class="away">Away</span></div>
+  <div class="loader-tagline">Pack your bags. The world is waiting.</div>
+  <div class="loader-dots"><span></span><span></span><span></span></div>
+</div>
+
+<nav id="nav">
+  <a class="logo" href="#">
+    <span class="go">Go</span><span class="get">Get</span><span class="away">Away</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#packages">Packages</a></li>
+    <li><a href="#destinations">Destinations</a></li>
+    <li><a href="#featured">Featured</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+  </ul>
+  <a href="#packages" class="nav-cta">Book Now ✈</a>
+  <button class="nav-hamburger" id="navHamburger" aria-label="Open menu" onclick="toggleMobileNav()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-nav" id="mobileNav">
+  <a href="#packages" onclick="closeMobileNav()">Packages</a>
+  <a href="#destinations" onclick="closeMobileNav()">Destinations</a>
+  <a href="#featured" onclick="closeMobileNav()">Featured</a>
+  <a href="#reviews" onclick="closeMobileNav()">Reviews</a>
+  <a href="#packages" class="mob-cta" onclick="closeMobileNav()">Book Now ✈</a>
+</div>
+
+<section class="hero" id="heroSection">
+  <canvas id="skyCanvas"></canvas>
+  <canvas id="starsCanvas"></canvas>
+  <img class="hero-dest-layer" id="destLayer0" src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=1600&q=85" alt="Bali">
+  <img class="hero-dest-layer" id="destLayer1" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&q=85" alt="Mountains" style="opacity:0">
+  <img class="hero-dest-layer" id="destLayer2" src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=1600&q=85" alt="Maldives" style="opacity:0">
+  <img class="hero-dest-layer" id="destLayer3" src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1600&q=85" alt="Kyoto" style="opacity:0">
+  <img class="hero-dest-layer" id="destLayer4" src="https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=1600&q=85" alt="Santorini" style="opacity:0">
+  <div class="hero-time-overlay" id="heroTimeOverlay"></div>
+  <div class="hero-side-fade" id="heroSideFade"></div>
+  <div class="hero-dots" id="heroDots"></div>
+  
+  <div class="sky-orb" id="sunOrb"></div>
+  <div class="sky-orb" id="moonOrb"></div>
+  <div class="shape shape-1"></div>
+  <div class="shape shape-2"></div>
+  <div class="shape shape-3"></div>
+  <div class="hero-dest-badge" id="heroDestBadge">
+    <div class="dest-name-big" id="heroDestName">Bali, Indonesia</div>
+    <div class="dest-country-small" id="heroDestSub">Tropical Paradise</div>
+    <div class="dest-dot-nav" id="destDotNav"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      12+ Destinations Available Now
+    </div>
+    <h1 class="hero-title">
+      Stop<br>
+      <span class="accent">Dreaming,</span>
+      <span class="outline">Go.</span>
+    </h1>
+    <p class="hero-sub">
+      Handpicked vacation packages that actually make you feel something.
+      From tropical hideaways to wild mountain adventures — we've got your escape.
+    </p>
+    <div class="hero-actions">
+      <a href="#packages" class="btn-main">Browse Packages <span class="arrow">→</span></a>
+      <a href="#destinations" class="btn-ghost-white">🌍 View Destinations</a>
+    </div>
+  </div>
+  
+  <div class="tod-slider-wrap">
+    <div class="tod-label">
+      <span>🌅</span>
+      <span class="tod-time-display" id="todTimeDisplay">12:00 PM</span>
+      <span>🌙</span>
+    </div>
+    <div class="tod-track">
+      <div class="tod-icons">
+        <span title="Dawn">🌄</span>
+        <span title="Morning">🌤</span>
+        <span title="Noon">☀️</span>
+        <span title="Sunset">🌇</span>
+        <span title="Night">🌃</span>
+      </div>
+      <input type="range" id="todRange" min="0" max="1440" value="720" oninput="onTodChange(this.value)">
+    </div>
+  </div>
+  <div class="hero-scroll-hint">
+    <div class="mouse"><div class="mouse-wheel"></div></div>
+    <span>Scroll</span>
+  </div>
+  <div class="hero-stats-strip">
+    <div class="hs"><span class="num">12+</span><span class="lbl">Destinations</span></div>
+    <div class="hs"><span class="num">4.9★</span><span class="lbl">Avg Rating</span></div>
+    <div class="hs"><span class="num">18K</span><span class="lbl">Happy Travelers</span></div>
+    <div class="hs"><span class="num">100%</span><span class="lbl">Satisfaction</span></div>
+  </div>
+</section>
+
+<div class="marquee-wrap">
+  <div class="marquee-inner" id="marqueeInner">
+    <div class="m-item">Bali Sanctuary <span class="m-star">✦</span></div>
+    <div class="m-item">Kyoto in Bloom <span class="m-star">✦</span></div>
+    <div class="m-item">Maldives Overwater <span class="m-star">✦</span></div>
+    <div class="m-item">Patagonia Wild <span class="m-star">✦</span></div>
+    <div class="m-item">Santorini Romance <span class="m-star">✦</span></div>
+    <div class="m-item">Serengeti Migration <span class="m-star">✦</span></div>
+    <div class="m-item">Machu Picchu &amp; Beyond <span class="m-star">✦</span></div>
+    <div class="m-item">Northern Lights Norway <span class="m-star">✦</span></div>
+    <div class="m-item">Morocco Desert Dream <span class="m-star">✦</span></div>
+    <div class="m-item">Amalfi Grand Tour <span class="m-star">✦</span></div>
+    <div class="m-item">Borneo Rainforest <span class="m-star">✦</span></div>
+    <div class="m-item">Tuscany Harvest <span class="m-star">✦</span></div>
+    <div class="m-item">Bali Sanctuary <span class="m-star">✦</span></div>
+    <div class="m-item">Kyoto in Bloom <span class="m-star">✦</span></div>
+    <div class="m-item">Maldives Overwater <span class="m-star">✦</span></div>
+    <div class="m-item">Patagonia Wild <span class="m-star">✦</span></div>
+    <div class="m-item">Santorini Romance <span class="m-star">✦</span></div>
+    <div class="m-item">Serengeti Migration <span class="m-star">✦</span></div>
+    <div class="m-item">Machu Picchu &amp; Beyond <span class="m-star">✦</span></div>
+    <div class="m-item">Northern Lights Norway <span class="m-star">✦</span></div>
+    <div class="m-item">Morocco Desert Dream <span class="m-star">✦</span></div>
+    <div class="m-item">Amalfi Grand Tour <span class="m-star">✦</span></div>
+    <div class="m-item">Borneo Rainforest <span class="m-star">✦</span></div>
+    <div class="m-item">Tuscany Harvest <span class="m-star">✦</span></div>
+  </div>
+</div>
+
+<div class="why-strip rev">
+  <div class="why-item">
+    <div class="why-icon">✈</div>
+    <h4>All-Inclusive Deals</h4>
+    <p>Flights, hotels, transfers — all bundled so you just show up.</p>
+  </div>
+  <div class="why-item">
+    <div class="why-icon">🎯</div>
+    <h4>Handpicked Only</h4>
+    <p>Every destination earns its spot through rigorous curation.</p>
+  </div>
+  <div class="why-item">
+    <div class="why-icon">💬</div>
+    <h4>24/7 Support</h4>
+    <p>Real humans, any time zone. We've got you on the road.</p>
+  </div>
+  <div class="why-item">
+    <div class="why-icon">🔒</div>
+    <h4>Best Price Promise</h4>
+    <p>Find it cheaper? We'll match it, no questions asked.</p>
+  </div>
+</div>
+
+<section id="packages" class="packages-sec">
+  <div class="pkg-header rev">
+    <div class="pkg-header-left">
+      <div class="sec-tag">Our Packages</div>
+      <h2 class="sec-title">Where do you want to <em>go?</em></h2>
+    </div>
+    <div class="filter-row" id="filterRow">
+      <button class="ftab on" onclick="filterCards('all',this)">All</button>
+      <button class="ftab" onclick="filterCards('beach',this)">🏖 Beach</button>
+      <button class="ftab" onclick="filterCards('adventure',this)">🏔 Adventure</button>
+      <button class="ftab" onclick="filterCards('culture',this)">🏛 Culture</button>
+      <button class="ftab" onclick="filterCards('romance',this)">💑 Romance</button>
+    </div>
+  </div>
+  <div class="search-panel rev">
+    <div class="search-bar-wrap">
+      <span class="search-icon" aria-hidden="true">🔍</span>
+      <input type="search" id="searchQuery" class="search-input" placeholder="Search packages, destinations, countries…" oninput="onSearchInput()" autocomplete="off">
+      <button type="button" class="search-clear" onclick="clearSearch()" aria-label="Clear search">✕</button>
+    </div>
+    <div class="search-filters">
+      <div class="search-field">
+        <label for="searchDestination">Destination</label>
+        <select id="searchDestination" onchange="onSearchInput()"></select>
+      </div>
+      <div class="search-field">
+        <label for="searchCountry">Country</label>
+        <select id="searchCountry" onchange="onSearchInput()"></select>
+      </div>
+      <div class="search-field">
+        <label for="searchType">Package type</label>
+        <select id="searchType" onchange="onSearchInput()">
+          <option value="">All types</option>
+          <option value="beach">🏖 Beach</option>
+          <option value="adventure">🏔 Adventure</option>
+          <option value="culture">🏛 Culture</option>
+          <option value="romance">💑 Romance</option>
+        </select>
+      </div>
+    </div>
+    <p class="search-meta" id="searchResultCount"></p>
+  </div>
+  <p class="search-empty" id="searchEmpty" style="display:none">No packages match your search. <button type="button" class="search-empty-btn" onclick="clearSearch()">Clear filters</button></p>
+  <div class="pkg-grid rev" id="pkgGrid"></div>
+</section>
+
+<section id="destinations" class="dest-sec">
+  <canvas class="particle-canvas" id="destParticles"></canvas>
+  <div class="dest-header rev">
+    <div class="sec-tag">Explore the Globe</div>
+    <h2 class="sec-title" style="color:#fff">Top <em>Destinations</em></h2>
+    <p class="sec-sub">Scroll through our most-loved spots on the planet.</p>
+  </div>
+  <div class="dest-scroll rev" id="destScroll"></div>
+  <p class="dest-scroll-hint rev">Swipe or drag to explore</p>
+</section>
+
+<div id="featured" class="feature-banner">
+  <div class="fb-left">
+    <div class="sec-tag">Featured Escape</div>
+    <h2 class="sec-title">Amalfi <em>Grand Tour</em></h2>
+    <p class="sec-sub">Cliff-top villas, private yachts, and the finest kitchens in Southern Italy. This is la dolce vita at full volume.</p>
+    <div class="fb-includes">
+      <div class="fb-inc"><div class="fb-inc-icon">✈</div>Business Class</div>
+      <div class="fb-inc"><div class="fb-inc-icon">🏛</div>Cliffside Villa</div>
+      <div class="fb-inc"><div class="fb-inc-icon">⛵</div>Private Yacht</div>
+      <div class="fb-inc"><div class="fb-inc-icon">🍝</div>Culinary Journey</div>
+      <div class="fb-inc"><div class="fb-inc-icon">🚁</div>Helicopter Transfer</div>
+      <div class="fb-inc"><div class="fb-inc-icon">🧭</div>Private Guide</div>
+    </div>
+    <a href="#" class="btn-main" onclick="openModal(10);return false">Book This Trip — ₱299,020 <span class="arrow">→</span></a>
+  </div>
+  <div class="fb-right">
+    <img src="https://images.unsplash.com/photo-1533105079780-92b9be482077?w=900&q=82" alt="Amalfi">
+    <div class="fb-price-badge">
+      <span class="from">Starting from</span>
+      <span class="amount">₱299,020</span>
+      <span class="nights">14 nights · 2 travelers</span>
+    </div>
+  </div>
+</div>
+
+<section id="reviews" class="test-sec">
+  <div class="test-header rev">
+    <div>
+      <div class="sec-tag">Happy Travelers</div>
+      <h2 class="sec-title">They went. <em>They loved it.</em></h2>
+    </div>
+    <div class="test-nav-btns">
+      <button class="tnav" onclick="slideTesti(-1)">←</button>
+      <button class="tnav" onclick="slideTesti(1)">→</button>
+    </div>
+  </div>
+  <div class="test-overflow">
+    <div class="test-track rev" id="testTrack">
+      <div class="test-card">
+        <div class="test-top"><div class="test-stars">★★★★★</div><div class="test-quote">"</div></div>
+        <p class="test-text">Solid dito ya, ano jey.</p>
+        <div class="test-author">
+          <div><strong>Karl Borinaga</strong><span>Bali Sanctuary, 2025</span></div>
+        </div>
+      </div>
+      <div class="test-card">
+        <div class="test-top"><div class="test-stars">★★★★★</div><div class="test-quote">"</div></div>
+        <p class="test-text">Arat na, pero masarap pa rin pares ni diwata kaysa rito sa Kyoto mga ya, 10/10!</p>
+        <div class="test-author">
+          <div><strong>Matthew Quiatchon</strong><span>Kyoto in Bloom, 2025</span></div>
+        </div>
+      </div>
+      <div class="test-card">
+        <div class="test-top"><div class="test-stars">★★★★★</div><div class="test-quote">"</div></div>
+        <p class="test-text">G na rito next time, ano tara?</p>
+        <div class="test-author">
+          <div><strong>Justine Quinto</strong><span>Patagonia Wild, 2024</span></div>
+        </div>
+      </div>
+      <div class="test-card">
+        <div class="test-top"><div class="test-stars">★★★★★</div><div class="test-quote">"</div></div>
+        <p class="test-text">Paldo rito sa Santorini, sulit view man!</p>
+        <div class="test-author">
+          <div><strong>Matt Quinto</strong><span>Santorini Romance, 2025</span></div>
+        </div>
+      </div>
+      <div class="test-card">
+        <div class="test-top"><div class="test-stars">★★★★★</div><div class="test-quote">"</div></div>
+        <p class="test-text">Tara rito next time, ano tara?</p>
+        <div class="test-author">
+          <div><strong>Justine Quiatchon</strong><span>Morocco Desert Dream, 2024</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-sec">
+  <canvas class="particle-canvas" id="ctaParticles"></canvas>
+  <div class="cta-tag">✈ Limited Spots Available</div>
+  <h2>Your next adventure<br>starts with a <em>click.</em></h2>
+  <p>Don't let the trip of a lifetime sit in your browser tabs forever. Book it. Go. You deserve it.</p>
+  <div class="cta-btns">
+    <a href="#packages" class="btn-cta">Browse All Packages</a>
+    <a href="#destinations" class="btn-cta-outline">Explore Destinations</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-main">
+    <div class="f-brand">
+      <span class="logo2">Go<span class="gg">Get</span>Away</span>
+      <p>We believe everyone deserves a great escape. We just make sure yours is extraordinary.</p>
+      <div class="socials">
+        <a class="soc" href="#">in</a>
+        <a class="soc" href="#">ig</a>
+        <a class="soc" href="#">fb</a>
+        <a class="soc" href="#">yt</a>
+      </div>
+    </div>
+    <div class="f-col">
+      <h5>Packages</h5>
+      <a href="#">Beach &amp; Tropics</a>
+      <a href="#">Adventure</a>
+      <a href="#">Culture &amp; Heritage</a>
+      <a href="#">Romance</a>
+      <a href="#">Family</a>
+    </div>
+    <div class="f-col">
+      <h5>Company</h5>
+      <a href="#">About Us</a>
+      <a href="#">How It Works</a>
+      <a href="#">Sustainability</a>
+      <a href="#">Careers</a>
+      <a href="#">Press</a>
+    </div>
+    <div class="f-col">
+      <h5>Help</h5>
+      <a href="#">Contact Us</a>
+      <a href="#">FAQs</a>
+      <a href="#">Cancellations</a>
+      <a href="#">Travel Insurance</a>
+      <a href="#">My Booking</a>
+    </div>
+  </div>
+  <div class="footer-bot">
+    <span>© 2026 GoGetAway. All rights reserved.</span>
+    <span><a href="#">Privacy</a> · <a href="#">Terms</a> · <a href="#">Cookies</a></span>
+  </div>
+</footer>
+
+<div class="modal-back" id="modalBack" onclick="closeModal(event)">
+  <div class="modal-box">
+    <div class="modal-img-wrap">
+      <img id="mImg" src="" alt="">
+      <button class="modal-close" onclick="document.getElementById('modalBack').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-region" id="mReg"></div>
+      <div class="modal-name" id="mName"></div>
+      <div class="modal-meta" id="mMeta"></div>
+      <div class="modal-chips" id="mChips"></div>
+      <div class="modal-desc" id="mDesc"></div>
+      <div class="modal-calc">
+        <h4>🧮 Trip Budget Calculator</h4>
+        <div class="calc-row">
+          <span class="calc-label">Travelers</span>
+          <input type="range" class="calc-slider" id="calcPax" min="1" max="10" value="2" oninput="updateCalc()">
+          <span class="calc-val" id="calcPaxVal">2</span>
+        </div>
+        <div class="calc-row">
+          <span class="calc-label">Extra Nights</span>
+          <input type="range" class="calc-slider" id="calcNights" min="0" max="7" value="0" oninput="updateCalc()">
+          <span class="calc-val" id="calcNightsVal">+0</span>
+        </div>
+        <div class="calc-total">
+          <span class="calc-total-label">Estimated Total</span>
+          <span class="calc-total-amt" id="calcTotal">₱0</span>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <div class="modal-price">
+          <span class="from">Starting from</span>
+          <span class="amount" id="mAmt"></span>
+          <span class="per"> / person</span>
+        </div>
+        <button class="btn-modal" onclick="openBooking()">Book Now ✈</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="book-back" id="bookBack" onclick="if(event.target===this)closeBooking()">
+  <div class="book-box">
+    <div class="book-header">
+      <div class="book-header-dest" id="bookDest"></div>
+      <h3 id="bookTitle"></h3>
+      <button class="book-close" onclick="closeBooking()">✕</button>
+    </div>
+    <div class="book-steps">
+      <div class="book-step-tab active" id="stab1">① Details</div>
+      <div class="book-step-tab" id="stab2">② Travelers</div>
+      <div class="book-step-tab" id="stab3">③ Confirm</div>
+    </div>
+    <div class="book-body">
+      <div class="book-alert" id="bookAlert" role="alert" hidden></div>
+      <div class="book-panel active" id="bpanel1">
+        <div class="book-row">
+          <div class="book-field book-field-cal" id="fieldBDate">
+            <label>Departure Date</label>
+            <p class="book-cal-picked" id="bDateDisplay">Tap an available day below</p>
+            <div class="book-cal" id="bookCalDep" aria-label="Departure calendar"></div>
+            <input type="hidden" id="bDate" value="">
+            <p class="book-field-hint" id="bookDateHint" aria-live="polite"></p>
+          </div>
+          <div class="book-field book-field-cal" id="fieldBReturn">
+            <label>Return Date</label>
+            <p class="book-cal-picked" id="bReturnDisplay">Tap an available day below</p>
+            <div class="book-cal" id="bookCalRet" aria-label="Return calendar"></div>
+            <input type="hidden" id="bReturn" value="">
+          </div>
+          <p class="book-cal-legend"><span class="book-cal-legend-taken"></span> Red = already taken</p>
+        </div>
+        <div class="book-field" id="fieldBCity">
+          <label>Departure City</label>
+          <select id="bCity">
+            <option value="">Select city...</option>
+            <option>Manila (MNL)</option>
+            <option>Cebu (CEB)</option>
+            <option>Davao (DVO)</option>
+            <option>Clark (CRK)</option>
+            <option>Iloilo (ILO)</option>
+          </select>
+        </div>
+        <div class="book-field">
+          <label>Travel Type</label>
+          <select id="bType">
+            <option>All-Inclusive Package</option>
+            <option>Land Only (No Flights)</option>
+            <option>Flights + Hotel Only</option>
+          </select>
+        </div>
+        <div class="book-nav">
+          <span></span>
+          <button class="btn-book-next" onclick="tryBookStep(2)">Next →</button>
+        </div>
+      </div>
+      <div class="book-panel" id="bpanel2">
+        <div class="book-row">
+          <div class="book-field">
+            <label>Adults (18+)</label>
+            <input type="number" id="bAdults" value="2" min="1" max="20" oninput="updateBookSummary()">
+          </div>
+          <div class="book-field">
+            <label>Children (0–17)</label>
+            <input type="number" id="bKids" value="0" min="0" max="10" oninput="updateBookSummary()">
+          </div>
+        </div>
+        <div class="book-field">
+          <label>Full Name (Lead Traveler)</label>
+          <input type="text" id="bName" placeholder="e.g. Juan dela Cruz" required>
+        </div>
+        <div class="book-row">
+          <div class="book-field" id="fieldBEmail">
+            <label>Email</label>
+            <input type="email" id="bEmail" placeholder="you@email.com" required>
+          </div>
+          <div class="book-field" id="fieldBPhone">
+            <label>Phone</label>
+            <input type="tel" id="bPhone" placeholder="+63 9XX XXX XXXX">
+          </div>
+        </div>
+        <div class="book-nav">
+          <button class="btn-book-back" onclick="bookStep(1)">← Back</button>
+          <button class="btn-book-next" onclick="tryBookStep(3)">Review →</button>
+        </div>
+      </div>
+      <div class="book-panel" id="bpanel3">
+        <div class="book-summary" id="bookSummary"></div>
+        <div class="book-field">
+          <label>Special Requests</label>
+          <input type="text" id="bNotes" placeholder="Dietary needs, accessibility, celebrations...">
+        </div>
+        <div class="book-nav">
+          <button class="btn-book-back" onclick="bookStep(2)">← Back</button>
+          <button class="btn-book-next coral" onclick="submitBooking()">Confirm Booking ✈</button>
+        </div>
+      </div>
+      <div class="book-success" id="bookSuccess">
+        <span class="book-success-icon">🎉</span>
+        <h4>You're all set!</h4>
+        <div class="book-ref-box">
+          <span class="book-ref-label">Booking reference</span>
+          <strong class="book-ref-code" id="bookRefDisplay">—</strong>
+          <button type="button" class="book-ref-copy" id="copyRefBtn" onclick="copyBookingRef()">Copy</button>
+        </div>
+        <p class="book-confirm-note" id="bookConfirmNote">Your booking is saved on this device.</p>
+        <p class="book-success-note">Ask our AI assistant about your reference anytime. Time to start packing! 🧳</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <symbol id="ai-bot-icon" viewBox="0 0 32 32">
+    <rect x="7" y="12" width="18" height="14" rx="4" fill="currentColor"/>
+    <circle cx="12" cy="18" r="2" fill="#fff"/>
+    <circle cx="20" cy="18" r="2" fill="#fff"/>
+    <path d="M11 12V9a5 5 0 0 1 10 0v3" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="16" y1="4" x2="16" y2="2" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="16" cy="2" r="1.5" fill="currentColor"/>
+    <rect x="4" y="16" width="3" height="6" rx="1.5" fill="currentColor"/>
+    <rect x="25" y="16" width="3" height="6" rx="1.5" fill="currentColor"/>
+  </symbol>
+</svg>
+
+<button type="button" class="ai-fab" id="aiFab" aria-label="Open GoGetAway AI assistant">
+  <svg class="ai-bot-svg" aria-hidden="true"><use href="#ai-bot-icon"/></svg>
+  <span class="ai-fab-pulse"></span>
+</button>
+
+<div class="ai-chat" id="aiChat" role="dialog" aria-label="GoGetAway AI Assistant" aria-hidden="true">
+  <div class="ai-chat-header">
+    <div class="ai-chat-avatar"><svg class="ai-bot-svg" aria-hidden="true"><use href="#ai-bot-icon"/></svg></div>
+    <div class="ai-chat-title">
+      <strong>GoGetAway AI</strong>
+      <span>Travel & booking assistant · 24/7</span>
+    </div>
+    <button type="button" class="ai-chat-close" id="aiChatClose" aria-label="Close chat">✕</button>
+  </div>
+  <div class="ai-messages" id="aiMessages"></div>
+  <div class="ai-suggestions" id="aiSuggestions"></div>
+  <form class="ai-input-row" id="aiForm">
+    <input type="text" id="aiInput" placeholder="Ask about packages, pricing, booking…" autocomplete="off" maxlength="500">
+    <button type="submit" class="ai-send" aria-label="Send message">↑</button>
+  </form>
+</div>
+
+<script src="script.js"></script>
+<script src="ai-assistant.js"></script>
+</body>
+</html>
